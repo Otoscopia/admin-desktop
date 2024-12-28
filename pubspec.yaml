@@ -41,6 +41,7 @@ dependencies:
   window_manager: ^0.4.3
   gap: ^3.0.1
   path_provider: ^2.1.5
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:
