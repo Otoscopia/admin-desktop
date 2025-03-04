@@ -41,3 +41,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# build_runner generated files
+*.g.dart
+
+# Sonar lint
+.scannerwork
+.sonarlint
+
+# Vscode
+.vscode
