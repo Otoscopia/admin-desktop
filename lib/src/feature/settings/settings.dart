@@ -19,9 +19,7 @@ class _SettingsState extends ConsumerState<Settings> {
     final user = ref.read(authenticationProvider).user;
 
     return ScaffoldPage.scrollable(
-      header: PageHeader(
-        title: Text("Settings"),
-      ),
+      header: PageHeader(title: Text("Settings")),
       children: [
         Row(
           spacing: 12,
@@ -40,8 +38,8 @@ class _SettingsState extends ConsumerState<Settings> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(user!.name).title,
-                  Text(user.emailAdress),
+                  Text(user!.readableName).title,
+                  Text(user.email),
                   Text(user.role.name.uppercaseFirst()),
                 ],
               ),
@@ -49,22 +47,27 @@ class _SettingsState extends ConsumerState<Settings> {
           ],
         ),
         gap32,
-        Expander(
-          leading: Icon(FluentIcons.user_optional, size: 28),
-          header: createHeader(
-            title: "User Information",
-            subtitle: "View and edit your user information",
+        Expanded(
+          child: Expander(
+            leading: Icon(FluentIcons.user_optional),
+            header: createHeader(
+              title: "User Information",
+              subtitle: "View and edit your user information",
+            ),
+            // content: Text("data"),
+            content: UserInformationWidget(),
           ),
-          content: UserInformationWidget(),
         ),
         gap12,
-        Expander(
-          leading: Icon(FluentIcons.settings_secure, size: 28),
-          header: createHeader(
-            title: "Account Security",
-            subtitle: "Modify your Account Security",
+        Expanded(
+          child: Expander(
+            leading: Icon(FluentIcons.settings_secure),
+            header: createHeader(
+              title: "Account Security",
+              subtitle: "Modify your Account Security",
+            ),
+            content: Text("data"),
           ),
-          content: Column(),
         ),
         gap12,
         Expander(
@@ -73,7 +76,7 @@ class _SettingsState extends ConsumerState<Settings> {
             title: "Colors",
             subtitle: "Modify Theme Mode and Accent Colors",
           ),
-          content: Column(),
+          content: Text("data"),
         ),
         gap12,
         Expander(
@@ -117,10 +120,7 @@ class _SettingsState extends ConsumerState<Settings> {
       padding: const EdgeInsets.only(left: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title).titleSmall,
-          Text(subtitle).caption,
-        ],
+        children: [Text(title).titleSmall, Text(subtitle).caption],
       ),
     );
   }

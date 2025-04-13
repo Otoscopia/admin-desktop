@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  desktop_webview_window
   isar_flutter_libs
   screen_retriever_linux
   sentry_flutter

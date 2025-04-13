@@ -2,8 +2,10 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:admin/src/core/index.dart';
+import 'package:admin/src/feature/audit_logs/audit_logs.dart';
 import 'package:admin/src/feature/settings/settings.dart';
-import 'package:admin/src/feature/user_management/user_management.dart';
+import 'package:admin/src/feature/user_management/tabs/authentication_tabs.dart';
+import 'package:admin/src/feature/user_management/tabs/user_tabs.dart';
 
 class Admin extends ConsumerStatefulWidget {
   const Admin({super.key});
@@ -29,27 +31,33 @@ class _AdminState extends ConsumerState<Admin> {
           PaneItem(
             icon: Icon(FluentIcons.view_dashboard),
             title: Text("Dashboard"),
-            body: Center(
-              child: Text("Dashboard"),
-            ),
+            body: Center(child: Text("Dashboard")),
           ),
           PaneItem(
             icon: Icon(FluentIcons.people),
             title: Text("Users Management"),
-            body: UserManagement(),
+            body: TabPages(
+              icons: [FluentIcons.user_sync, FluentIcons.security_group],
+              tabTitles: ['Account Lifecycle', 'Authentication'],
+              bodies: [UserTabs(), AuthenticationTabs()],
+            ),
           ),
           PaneItem(
             icon: Icon(FluentIcons.cloud_secure),
             title: Text("Access Controll"),
-            body: Center(
-              child: Text("Access Controll"),
+            body: TabPages(
+              tabTitles: ['Role Assignment', 'Roles'],
+              icons: [FluentIcons.temporary_user, FluentIcons.user_window],
+              bodies: [Placeholder(), Placeholder()],
             ),
           ),
           PaneItem(
             icon: Icon(FluentIcons.history),
             title: Text("Audit Logs"),
-            body: Center(
-              child: Text("Audit Logs"),
+            body: TabPages(
+              tabTitles: ['Logs Filter', 'Main Logs'],
+              icons: [FluentIcons.filter, FluentIcons.bulleted_list],
+              bodies: [LogFilter(), MainLogs()],
             ),
           ),
         ],

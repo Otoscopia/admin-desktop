@@ -21,9 +21,10 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
     final accentColor = ref.watch(currentAccentColorProvider).toAccentColor();
-    final accent = theme.systemAccent
-        ? accentColor
-        : SystemTheme.fallbackColor.toAccentColor();
+    final accent =
+        theme.systemAccent
+            ? accentColor
+            : SystemTheme.fallbackColor.toAccentColor();
 
     return FluentApp(
       title: 'Otoscopia Admin',
@@ -32,15 +33,27 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: FluentThemeData.light().copyWith(accentColor: accent),
       darkTheme: FluentThemeData.dark().copyWith(accentColor: accent),
       navigatorObservers: !kDebugMode ? [SentryNavigatorObserver()] : [],
-      home: AppContainer(
-        onLoaded: (context) {
-          final auth = ref.watch(authenticationProvider);
+      home:
+          kIsWeb
+              ? FutureBuilder(
+                future: null,
+                builder: (context, snapshot) {
+                  final auth = ref.watch(authenticationProvider);
 
-          return PageContainer(
-            content: auth.user != null ? Admin() : SignIn(),
-          );
-        },
-      ),
+                  return PageContainer(
+                    content: auth.user != null ? Admin() : SignIn(),
+                  );
+                },
+              )
+              : AppContainer(
+                onLoaded: (context) {
+                  final auth = ref.watch(authenticationProvider);
+
+                  return PageContainer(
+                    content: auth.user != null ? Admin() : SignIn(),
+                  );
+                },
+              ),
     );
   }
 }

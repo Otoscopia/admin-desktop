@@ -1,1 +1,10 @@
-enum Status { online, deactivated, offline }
+enum Status {
+  online,
+  offline,
+  activated,
+  deactivated,
+  verified,
+  unverified,
+  enabled,
+  disabled,
+}

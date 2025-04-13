@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:admin/src/core/index.dart';
 
-import '../pages/authentication_tab_page.dart';
+import '../pages/manage_user_page.dart';
 import '../pages/user_tab_page.dart';
 
 class UserTabs extends ConsumerStatefulWidget {
@@ -38,7 +38,7 @@ class _UserTabsState extends ConsumerState<UserTabs> {
     tab = Tab(
       text: Text(name),
       icon: Icon(FluentIcons.data_management_settings),
-      body: AuthenticationTabPage(uid),
+      body: ManageUserPage(uid),
       onClosed: () {
         tabs.remove(tab);
         if (currentIndex > 0) currentIndex--;
@@ -54,20 +54,15 @@ class _UserTabsState extends ConsumerState<UserTabs> {
   Widget build(BuildContext context) {
     return ScaffoldPage(
       padding: EdgeInsets.symmetric(vertical: Sizes.p4),
-      content: ClipRRect(
-        child: ColoredBox(
-          color: Color(0xFF282828), // TODO: Make color responsive
-          child: TabView(
-            shortcutsEnabled: false,
-            currentIndex: currentIndex,
-            tabs: tabs,
-            onChanged: (value) {
-              setState(() {
-                currentIndex = value;
-              });
-            },
-          ),
-        ),
+      content: TabView(
+        shortcutsEnabled: false,
+        currentIndex: currentIndex,
+        tabs: tabs,
+        onChanged: (value) {
+          setState(() {
+            currentIndex = value;
+          });
+        },
       ),
     );
   }

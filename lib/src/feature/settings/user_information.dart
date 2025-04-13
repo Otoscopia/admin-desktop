@@ -18,30 +18,28 @@ class _UserInformationWidgetState extends ConsumerState<UserInformationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldPage(
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        spacing: Sizes.p16,
-        children: [
-          Row(
-            children: [
-              CustomTextBox(
-                label: "Full Name",
-                controller: nameController,
-              ),
-              CustomTextBox(
-                label: "Contact Number",
-                controller: phoneController,
-              ),
-            ],
-          ),
-          CustomTextBox(
-            label: "Work Address",
-            controller: workAddress,
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      spacing: Sizes.p16,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomTextBox(label: "Full Name", controller: nameController),
+            CustomTextBox(label: "Contact Number", controller: phoneController),
+            SizedBox(width: 64),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CustomTextBox(label: "Work Address", controller: workAddress),
+            FilledButton(child: Text('Edit Information'), onPressed: () {}),
+          ],
+        ),
+      ],
     );
   }
 }

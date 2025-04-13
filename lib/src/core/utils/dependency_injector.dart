@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 import 'package:appwrite/appwrite.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
@@ -19,8 +20,13 @@ late final Account account;
 late final Databases database;
 late final Storage storage;
 late final Functions functions;
+late final Realtime realtime;
+late Map<String, dynamic> collectionIds;
+late Map<String, dynamic> functionIds;
+late Map<String, dynamic> storageIds;
 late final Isar isar;
 late final Directory appDir;
+late final BaseDeviceInfo device;
 
 class DependencyInjector {
   static final DependencyInjector _singleton = DependencyInjector._internal();
@@ -32,15 +38,19 @@ class DependencyInjector {
   DependencyInjector._internal();
 
   Future<void> init() async {
-    await loggerManager();
+    if (!kIsWeb) {
+      await loggerManager();
+      logger.info("Initializing dependencies...");
 
-    logger.info("Initializing dependencies...");
+      await desktopManager();
+    }
 
-    await desktopManager();
     await appwriteManager();
     await isarManager();
 
-    logger.info("Dependencies Initialized...");
+    await deviceInfoManager();
+
+    if (!kIsWeb) logger.info("Dependencies Initialized...");
   }
 
   Future<void> desktopManager() async {
@@ -48,8 +58,8 @@ class DependencyInjector {
     await windowManager.ensureInitialized();
 
     final windowOptions = WindowOptions(
-      size: Size(1000, 700),
-      minimumSize: Size(1000, 700),
+      size: Size(1000, 775),
+      minimumSize: Size(1000, 775),
       title: "Otoscopia Admin",
       center: true,
       skipTaskbar: false,
@@ -79,10 +89,7 @@ class DependencyInjector {
     fileOutput = FileOutput(file: logFile);
 
     logger = Logger(
-      output: MultiOutput([
-        ConsoleOutput(),
-        fileOutput,
-      ]),
+      output: MultiOutput([ConsoleOutput(), fileOutput]),
       printer: PrettyPrinter(
         methodCount: 0,
         dateTimeFormat: DateTimeFormat.dateAndTime,
@@ -92,7 +99,8 @@ class DependencyInjector {
   }
 
   Future<void> appwriteManager() async {
-    logger.info("Setting up appwrite back-end connection...");
+    if (!kIsWeb) logger.info("Setting up appwrite back-end connection...");
+
     final client = Client();
     client.setEndpoint(Env.appwriteClient).setProject(Env.appwriteProject);
 
@@ -100,11 +108,14 @@ class DependencyInjector {
     database = Databases(client);
     storage = Storage(client);
     functions = Functions(client);
+    realtime = Realtime(client);
   }
 
   Future<void> isarManager() async {
-    logger.info("Setting up Isar storage...");
     const schemas = [UserModelSchema];
+
+    if (!kIsWeb) logger.info("Setting up Isar storage...");
+
     if (kIsWeb) {
       await Isar.initialize();
 
@@ -121,6 +132,12 @@ class DependencyInjector {
       );
     }
   }
+
+  Future<void> deviceInfoManager() async {
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+    device = await deviceInfo.deviceInfo;
+  }
 }
 
 class FileOutput extends LogOutput {
@@ -134,10 +151,9 @@ class FileOutput extends LogOutput {
     this.overrideExisting = false,
     this.encoding = utf8,
   }) : _sink = file.openWrite(
-          mode:
-              overrideExisting ? FileMode.writeOnly : FileMode.writeOnlyAppend,
-          encoding: encoding,
-        );
+         mode: overrideExisting ? FileMode.writeOnly : FileMode.writeOnlyAppend,
+         encoding: encoding,
+       );
 
   @override
   void output(OutputEvent event) {

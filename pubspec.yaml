@@ -28,11 +28,12 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  appwrite: ^14.0.0
+  appwrite: ^15.0.0
   cupertino_icons: ^1.0.8
-  data_table_2: ^2.5.18
+  data_table_2: ^2.6.0
+  device_info_plus: ^10.1.2
   envied: ^1.1.1
-  fluent_ui: ^4.11.2
+  fluent_ui: ^4.11.3
   fluentui_system_icons: ^1.1.273
   flutter:
     sdk: flutter
@@ -64,6 +65,9 @@ dev_dependencies:
     sdk: flutter
   riverpod_generator: ^2.6.3
   riverpod_lint: ^2.6.3
+
+dependency_overrides:
+  flutter_web_auth_2: 4.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

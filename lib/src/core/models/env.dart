@@ -13,19 +13,6 @@ abstract class Env {
   @EnviedField(varName: "APPWRITE_PROJECT", obfuscate: true)
   static final String appwriteProject = _Env.appwriteProject;
 
-  @EnviedField(varName: "DATABASE", obfuscate: true)
-  static final String database = _Env.database;
-
-  @EnviedField(varName: "USER_COLLECTION", obfuscate: true)
-  static final String userCollection = _Env.userCollection;
-
-  // Storage
-  @EnviedField(varName: "PRESCRIPTIONS_BUCKET", obfuscate: true)
-  static final String prescriptionBucket = _Env.prescriptionBucket;
-
-  @EnviedField(varName: "SCREENINGS_BUCKET", obfuscate: true)
-  static final String screeningBucket = _Env.screeningBucket;
-
-  @EnviedField(varName: "AVATARS_BUCKET", obfuscate: true)
-  static final String avatarBucket = _Env.avatarBucket;
+  @EnviedField(varName: "APPWRITE_INJECTOR", obfuscate: true)
+  static final String appwriteInjector = _Env.appwriteInjector;
 }

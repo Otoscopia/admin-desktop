@@ -7,188 +7,190 @@ import 'package:admin/src/core/index.dart';
 
 class UserEntity {
   final String uid;
-  final String name;
-  final Role role;
-  final Status status;
-  final String emailAdress;
-  final String workAddress;
+  final String readableName;
+  final String firstName;
+  final String? middleName;
+  final String lastName;
+  final String email;
   final String contactNumber;
-  final DateTime createdAt;
-  final bool mfaEnabled;
-  final bool isVerified;
+  final String workAddress;
   final bool isPhoneVerified;
   final bool isEmailVerified;
   final DateTime lastPasswordUpdated;
-  final DateTime passwordExpiration;
+  final Role role;
+  final Gender gender;
+  final Status activityStatus;
+  final Status accountStatus;
+  final DateTime createdAt;
+  final bool mfaEnabled;
+  final bool isVerified;
+  final DateTime? passwordExpiration;
+  final Map<String, dynamic> collectionIds;
+  final Map<String, dynamic> functionIds;
+  final Map<String, dynamic> storageIds;
+  final DateTime? deactivationTime;
   final String? session;
+  final String? location;
+  final String? ip;
 
   UserEntity({
     required this.uid,
-    required this.name,
-    required this.role,
-    required this.status,
-    required this.emailAdress,
-    required this.workAddress,
+    required this.readableName,
+    required this.firstName,
+    required this.middleName,
+    required this.lastName,
+    required this.email,
     required this.contactNumber,
-    required this.createdAt,
-    required this.mfaEnabled,
-    required this.isVerified,
+    required this.workAddress,
     required this.isPhoneVerified,
     required this.isEmailVerified,
     required this.lastPasswordUpdated,
-    required this.passwordExpiration,
+    required this.role,
+    required this.gender,
+    required this.activityStatus,
+    required this.accountStatus,
+    required this.createdAt,
+    required this.mfaEnabled,
+    required this.isVerified,
+    required this.collectionIds,
+    required this.functionIds,
+    required this.storageIds,
     this.session,
+    this.location,
+    this.ip,
+    this.deactivationTime,
+    this.passwordExpiration,
   });
 
   UserEntity copyWith({
     String? uid,
-    String? name,
-    Role? role,
-    Status? status,
-    String? emailAdress,
-    String? workAddress,
+    String? readableName,
+    String? firstName,
+    String? middleName,
+    String? lastName,
+    String? email,
     String? contactNumber,
-    DateTime? createdAt,
-    bool? mfaEnabled,
-    bool? isVerified,
+    String? workAddress,
     bool? isPhoneVerified,
     bool? isEmailVerified,
     DateTime? lastPasswordUpdated,
+    Role? role,
+    Gender? gender,
+    Status? activityStatus,
+    Status? accountStatus,
+    DateTime? createdAt,
+    bool? mfaEnabled,
+    bool? isVerified,
     DateTime? passwordExpiration,
+    Map<String, dynamic>? collectionIds,
+    Map<String, dynamic>? functionIds,
+    Map<String, dynamic>? storageIds,
+    String? session,
+    String? location,
+    String? ip,
   }) {
     return UserEntity(
       uid: uid ?? this.uid,
-      name: name ?? this.name,
-      role: role ?? this.role,
-      status: status ?? this.status,
-      emailAdress: emailAdress ?? this.emailAdress,
-      workAddress: workAddress ?? this.workAddress,
+      readableName: readableName ?? this.readableName,
+      firstName: firstName ?? this.firstName,
+      middleName: middleName ?? this.middleName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
       contactNumber: contactNumber ?? this.contactNumber,
-      createdAt: createdAt ?? this.createdAt,
-      mfaEnabled: mfaEnabled ?? this.mfaEnabled,
-      isVerified: isVerified ?? this.isVerified,
+      workAddress: workAddress ?? this.workAddress,
       isPhoneVerified: isPhoneVerified ?? this.isPhoneVerified,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       lastPasswordUpdated: lastPasswordUpdated ?? this.lastPasswordUpdated,
+      role: role ?? this.role,
+      gender: gender ?? this.gender,
+      activityStatus: activityStatus ?? this.activityStatus,
+      accountStatus: accountStatus ?? this.accountStatus,
+      createdAt: createdAt ?? this.createdAt,
+      mfaEnabled: mfaEnabled ?? this.mfaEnabled,
+      isVerified: isVerified ?? this.isVerified,
       passwordExpiration: passwordExpiration ?? this.passwordExpiration,
+      collectionIds: collectionIds ?? this.collectionIds,
+      functionIds: functionIds ?? this.functionIds,
+      storageIds: storageIds ?? this.storageIds,
+      session: session ?? this.session,
+      location: location ?? this.location,
+      ip: ip ?? this.ip,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'uid': uid,
-      'name': name,
+      'readable_name': readableName,
+      'first_name': firstName,
+      'middle_name': middleName,
+      'last_name': lastName,
+      'email': email,
+      'contact_number': contactNumber,
+      'work_address': workAddress,
+      'is_phone_verified': isPhoneVerified,
+      'is_email_verified': isEmailVerified,
+      'last_password_updated': lastPasswordUpdated.millisecondsSinceEpoch,
       'role': role.name,
-      'status': status.name,
-      'emailAdress': emailAdress,
-      'workAddress': workAddress,
-      'contactNumber': contactNumber,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'mfaEnabled': mfaEnabled,
-      'isVerified': isVerified,
-      'isPhoneVerified': isPhoneVerified,
-      'isEmailVerified': isEmailVerified,
-      'lastPasswordUpdated': lastPasswordUpdated.millisecondsSinceEpoch,
-      'passwordExpiration': passwordExpiration.millisecondsSinceEpoch,
+      'gender': gender.name,
+      'activity_status': activityStatus.name,
+      'account_status': accountStatus.name,
+      'mfa_enabled': mfaEnabled,
+      'is_verified': isVerified,
+      'password_expiration': passwordExpiration?.millisecondsSinceEpoch,
+      'session': session,
+      'deactivated_time': deactivationTime,
     };
   }
 
-  factory UserEntity.fromUser({
+  factory UserEntity.fromAppwrite({
     required Document user,
-    required String session,
-    required User account,
+    required Session session,
+    required Map<String, dynamic> collectionIds,
+    required Map<String, dynamic> functionIds,
+    required Map<String, dynamic> storageIds,
   }) {
     Map<String, dynamic> data = user.data;
-    Role role = account.labels
-        .map((e) => Role.values.firstWhere((role) => role.name.contains(e)))
-        .first;
+    final role = data['role']['key'];
+    final gender = data['gender']['name'];
+    final activityStatus = data['activity_status']['status']['name'];
+    final accountStatus = data['account_status']['status']['name'];
+    final deactivationTime = data['account_status']['deactivation'];
 
     return UserEntity(
-      uid: user.$id,
-      name: account.name,
-      role: role,
-      status: Status.online, // ! Update Status
-      emailAdress: account.email,
-      workAddress: "Secret",
-      contactNumber: data['phone'],
-      createdAt: DateTime.parse(account.$createdAt),
-      mfaEnabled: account.mfa,
-      isEmailVerified: account.emailVerification,
-      isPhoneVerified: account.phoneVerification,
-      isVerified: account.emailVerification && account.phoneVerification,
-      lastPasswordUpdated: DateTime.parse(account.passwordUpdate),
-      passwordExpiration: DateTime.now(), // ! Update Password Expiration
-      session: session,
-    );
-  }
-
-  factory UserEntity.fromMap(Map<String, dynamic> map) {
-    return UserEntity(
-      uid: map['uid'] as String,
-      name: map['name'] as String,
-      role: Role.values.firstWhere((role) => role.name.contains(map['role'])),
-      status: Status.values
-          .firstWhere((status) => status.name.contains(map['status'])),
-      emailAdress: map['emailAdress'] as String,
-      workAddress: map['workAddress'] as String,
-      contactNumber: map['contactNumber'] as String,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      mfaEnabled: map['mfaEnabled'] as bool,
-      isVerified: map['isVerified'] as bool,
-      isPhoneVerified: map['isPhoneVerified'] as bool,
-      isEmailVerified: map['isEmailVerified'] as bool,
-      lastPasswordUpdated: DateTime.fromMillisecondsSinceEpoch(
-          map['lastPasswordUpdated'] as int),
-      passwordExpiration:
-          DateTime.fromMillisecondsSinceEpoch(map['passwordExpiration'] as int),
+      uid: data['\$id'],
+      readableName: user.data['readable_name'],
+      firstName: user.data['first_name'],
+      middleName: user.data['middle_name'],
+      lastName: user.data['last_name'],
+      email: user.data['email'],
+      contactNumber: data['contact_number'],
+      workAddress: data['work_address'],
+      role: Role.values.firstWhere((r) => r.name.contains(role)),
+      gender: Gender.values.firstWhere((g) => g.name.contains(gender)),
+      mfaEnabled: data['mfa_enabled'],
+      isVerified: data['is_verified'],
+      isPhoneVerified: data['is_phone_verified'],
+      isEmailVerified: data['is_email_verified'],
+      lastPasswordUpdated: DateTime.parse(data['last_password_updated']),
+      activityStatus: Status.values.firstWhere(
+        (s) => s.name.contains(activityStatus),
+      ),
+      accountStatus: Status.values.firstWhere(
+        (status) => status.name.contains(accountStatus),
+      ),
+      createdAt: DateTime.parse(user.$createdAt),
+      passwordExpiration: null, // ! Update Password Expiration
+      collectionIds: collectionIds,
+      functionIds: functionIds,
+      storageIds: storageIds,
+      session: session.$id,
+      location: session.countryName,
+      ip: session.ip,
+      deactivationTime:
+          deactivationTime != null ? DateTime.tryParse(deactivationTime) : null,
     );
   }
 
   String toJson() => json.encode(toMap());
-
-  factory UserEntity.fromJson(String source) =>
-      UserEntity.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'UserEntity(uid: $uid, name: $name, role: $role, status: $status, emailAdress: $emailAdress, workAddress: $workAddress, contactNumber: $contactNumber, createdAt: $createdAt, mfaEnabled: $mfaEnabled, isVerified: $isVerified, isPhoneVerified: $isPhoneVerified, isEmailVerified: $isEmailVerified, lastPasswordUpdated: $lastPasswordUpdated, passwordExpiration: $passwordExpiration)';
-  }
-
-  @override
-  bool operator ==(covariant UserEntity other) {
-    if (identical(this, other)) return true;
-
-    return other.uid == uid &&
-        other.name == name &&
-        other.role == role &&
-        other.status == status &&
-        other.emailAdress == emailAdress &&
-        other.workAddress == workAddress &&
-        other.contactNumber == contactNumber &&
-        other.createdAt == createdAt &&
-        other.mfaEnabled == mfaEnabled &&
-        other.isVerified == isVerified &&
-        other.isPhoneVerified == isPhoneVerified &&
-        other.isEmailVerified == isEmailVerified &&
-        other.lastPasswordUpdated == lastPasswordUpdated &&
-        other.passwordExpiration == passwordExpiration;
-  }
-
-  @override
-  int get hashCode {
-    return uid.hashCode ^
-        name.hashCode ^
-        role.hashCode ^
-        status.hashCode ^
-        emailAdress.hashCode ^
-        workAddress.hashCode ^
-        contactNumber.hashCode ^
-        createdAt.hashCode ^
-        mfaEnabled.hashCode ^
-        isVerified.hashCode ^
-        isPhoneVerified.hashCode ^
-        isEmailVerified.hashCode ^
-        lastPasswordUpdated.hashCode ^
-        passwordExpiration.hashCode;
-  }
 }
