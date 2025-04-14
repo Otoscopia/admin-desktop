@@ -2,18 +2,17 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:admin/src/core/index.dart';
+import 'package:admin/src/feature/roles/pages/create_team.dart';
+import 'package:admin/src/feature/roles/pages/main_view.dart';
 
-import '../pages/manage_user_page.dart';
-import '../pages/user_tab_page.dart';
-
-class UserTabs extends ConsumerStatefulWidget {
-  const UserTabs({super.key});
+class RoleAssignment extends ConsumerStatefulWidget {
+  const RoleAssignment({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _UserTabsState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _RoleAssignmentState();
 }
 
-class _UserTabsState extends ConsumerState<UserTabs> {
+class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
   int currentIndex = 0;
   late final List<Tab> tabs;
 
@@ -22,23 +21,23 @@ class _UserTabsState extends ConsumerState<UserTabs> {
     super.initState();
     tabs = [
       Tab(
-        icon: Icon(FluentIcons.group),
-        text: Text('Users'),
-        body: UserTabPage(
-          onUserTabPressed: ({required String name, required String uid}) {
-            generateTab(name: name, uid: uid);
+        icon: Icon(FluentIcons.view_dashboard),
+        text: Text('Main View'),
+        body: MainView(
+          onAddButtonClick: () {
+            generateTab(name: "Create Team");
           },
         ),
       ),
     ];
   }
 
-  void generateTab({required name, required uid}) {
+  void generateTab({required name}) {
     late final Tab tab;
     tab = Tab(
       text: Text(name),
-      icon: Icon(FluentIcons.data_management_settings),
-      body: ManageUserPage(uid),
+      icon: Icon(FluentIcons.teamwork),
+      body: CreateTeam(),
       onClosed: () {
         tabs.remove(tab);
         if (currentIndex > 0) currentIndex--;
@@ -46,7 +45,7 @@ class _UserTabsState extends ConsumerState<UserTabs> {
     );
 
     tabs.add(tab);
-    currentIndex = tabs.length - 1;
+    currentIndex++;
     setState(() => {});
   }
 

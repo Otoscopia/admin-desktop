@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:admin/src/core/index.dart';
 import 'package:admin/src/feature/audit_logs/audit_logs.dart';
+import 'package:admin/src/feature/roles/tabs/role_assignment.dart';
+import 'package:admin/src/feature/roles/tabs/roles_tab.dart';
 import 'package:admin/src/feature/settings/settings.dart';
 import 'package:admin/src/feature/user_management/tabs/authentication_tabs.dart';
 import 'package:admin/src/feature/user_management/tabs/user_tabs.dart';
@@ -48,7 +50,7 @@ class _AdminState extends ConsumerState<Admin> {
             body: TabPages(
               tabTitles: ['Role Assignment', 'Roles'],
               icons: [FluentIcons.temporary_user, FluentIcons.user_window],
-              bodies: [Placeholder(), Placeholder()],
+              bodies: [RoleAssignment(), RolesTab()],
             ),
           ),
           PaneItem(
