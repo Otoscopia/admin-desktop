@@ -20,7 +20,7 @@ class AuthenticationEntity {
     );
   }
 
-  String logDetails(String resource) {
+  String logDetails(String event, {String? userId}) {
     late String info;
     if (kIsWeb) {
       final web = (device as WebBrowserInfo);
@@ -34,11 +34,12 @@ class AuthenticationEntity {
     }
 
     return json.encode({
-      'user': user?.uid,
+      'user': userId ?? user?.uid,
+      'role': user?.roleId,
       'location': user?.location,
       'ip': user?.ip,
       'device': info,
-      'resource': resource,
+      'event': event,
     });
   }
 }

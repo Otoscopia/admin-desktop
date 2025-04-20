@@ -58,8 +58,14 @@ class _AppContainerState extends ConsumerState<AppContainer>
               FilledButton(
                 child: Text('Yes'),
                 onPressed: () async {
-                  context.pop();
+                  await ref.read(authenticationProvider.notifier).signOut();
+
                   await windowManager.destroy();
+
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    context.pop();
+                    setState(() {});
+                  });
                 },
               ),
             ],
@@ -92,18 +98,19 @@ class _AppContainerState extends ConsumerState<AppContainer>
           Padding(
             padding: EdgeInsets.only(right: 8.0),
             child: ToggleSwitch(
-                checked: context.isDark,
-                onChanged: (v) {
-                  if (v) {
-                    ref
-                        .read(appThemeProvider.notifier)
-                        .changeTheme(ThemeMode.dark);
-                  } else {
-                    ref
-                        .read(appThemeProvider.notifier)
-                        .changeTheme(ThemeMode.light);
-                  }
-                }),
+              checked: context.isDark,
+              onChanged: (v) {
+                if (v) {
+                  ref
+                      .read(appThemeProvider.notifier)
+                      .changeTheme(ThemeMode.dark);
+                } else {
+                  ref
+                      .read(appThemeProvider.notifier)
+                      .changeTheme(ThemeMode.light);
+                }
+              },
+            ),
           ),
           SizedBox(
             width: 138,
@@ -112,7 +119,7 @@ class _AppContainerState extends ConsumerState<AppContainer>
               brightness: context.brightness,
               backgroundColor: AppColors.transparent,
             ),
-          )
+          ),
         ],
       ),
     );

@@ -1,11 +1,24 @@
+import 'package:appwrite/models.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:admin/src/core/index.dart';
+import 'package:admin/src/core/services/document_list_extensions.dart';
 import 'package:admin/src/feature/user_management/widget/configuration_container.dart';
 
 class AuthenticationConfiguration extends ConsumerStatefulWidget {
-  const AuthenticationConfiguration({super.key});
+  final DocumentList configuration;
+  final DocumentList passwordExpiration;
+  final DocumentList passwordGracePeriod;
+  final DocumentList idleSessionTimeout;
+
+  const AuthenticationConfiguration({
+    super.key,
+    required this.configuration,
+    required this.passwordExpiration,
+    required this.passwordGracePeriod,
+    required this.idleSessionTimeout,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -14,119 +27,117 @@ class AuthenticationConfiguration extends ConsumerStatefulWidget {
 
 class _AuthenticationConfigurationState
     extends ConsumerState<AuthenticationConfiguration> {
-  // Future<Document> fetchDetails() async {
-  //   final response = await database.listDocuments(
-  //     databaseId: databaseId,
-  //     collectionId: getCollectionId('users'),
-  //     queries: [Query.equal('key', 'admin-auth-configuration')],
-  //   );
-
-  //   return response.documents.first;
-  // }
+  String id = '';
   bool mfa = false;
+  String selectedIdleSession = '';
+  String selectedPasswordExpiration = '';
+  String selectedPasswordExpirationPeriod = '';
 
-  String selectedPasswordExpiration = "60";
-  final passwordExpirationDurations = [
-    ComboBoxItem(value: "60", child: Text("60 Days")),
-    ComboBoxItem(value: "90", child: Text("90 Days")),
-    ComboBoxItem(value: "180", child: Text("180 Days")),
-    ComboBoxItem(value: "170", child: Text("170 Days")),
-    ComboBoxItem(value: "365", child: Text("365 Days (1 Year)")),
-  ];
+  late final List<ComboBoxItem<String>> passwordExpirationDurations;
 
-  String selectedPasswordExpirationPeriod = "1";
-  final passwordEpirationGracePeriod = [
-    ComboBoxItem(value: "1", child: Text("1 Day")),
-    ComboBoxItem(value: "2", child: Text("2 Days")),
-    ComboBoxItem(value: "3", child: Text("3 Days")),
-    ComboBoxItem(value: "4", child: Text("4 Days")),
-    ComboBoxItem(value: "5", child: Text("5 Days")),
-    ComboBoxItem(value: "6", child: Text("6 Days")),
-    ComboBoxItem(value: "7", child: Text("7 Day (1 Week)")),
-  ];
+  late final List<ComboBoxItem<String>> passwordGracePeriod;
 
-  String selectedIdleSession = "15";
-  final idleSessionTimeout = [
-    ComboBoxItem(value: "15", child: Text("15 Minutes")),
-    ComboBoxItem(value: "30", child: Text("30 Minutes")),
-  ];
+  late final List<ComboBoxItem<String>> idleSessionTimeout;
+
+  @override
+  void initState() {
+    final configuration = widget.configuration.toConfiguration(
+      widget.configuration,
+    );
+
+    id = configuration['\$id'];
+    mfa = configuration['mfa_status'];
+    selectedIdleSession = configuration['idle_session_timeout']['\$id'];
+    selectedPasswordExpiration = configuration['password_expiration']['\$id'];
+    selectedPasswordExpirationPeriod =
+        configuration['password_grace_period']['\$id'];
+
+    passwordExpirationDurations = widget.passwordExpiration
+        .toPasswordExpiration(widget.passwordExpiration);
+
+    passwordGracePeriod = widget.passwordGracePeriod.toPasswordExpiration(
+      widget.passwordGracePeriod,
+    );
+
+    idleSessionTimeout = widget.idleSessionTimeout.toPasswordExpiration(
+      widget.idleSessionTimeout,
+    );
+    super.initState();
+  }
+
+  Future<void> updateDocument(
+    String key, {
+    String? value,
+    bool mfa = false,
+  }) async {
+    await database.updateDocument(
+      databaseId: databaseId,
+      collectionId: getCollectionId('admin_users_account_configuration'),
+      documentId: id,
+      data: {key: value ?? mfa},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
       padding: EdgeInsets.zero,
-      content: FutureBuilder(
-        // future: fetchDetails(),
-        future: Future.delayed(Duration(milliseconds: 50)),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: ProgressRing());
-          }
-
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Something wen't wrong ${snapshot.error}"),
-            );
-          }
-
-          // final user = snapshot.data as Document;
-
-          return Padding(
-            padding: const EdgeInsets.all(Sizes.p24),
-            child: SizedBox(
-              width: 650,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                spacing: Sizes.p24,
+      content: Padding(
+        padding: const EdgeInsets.all(Sizes.p24),
+        child: SizedBox(
+          width: 650,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            spacing: Sizes.p24,
+            children: [
+              Padding(padding: const EdgeInsets.only(top: Sizes.p24)),
+              Text("Settings").titleSmallBold,
+              ConfigurationContainer(
+                'Default Password Expiration Duration',
+                items: passwordExpirationDurations,
+                value: selectedPasswordExpiration,
+                onChanged: (value) async {
+                  await updateDocument('password_expiration', value: value);
+                  setState(() => selectedPasswordExpiration = value);
+                },
+              ),
+              ConfigurationContainer(
+                'Password Expiration Grace Period',
+                items: passwordGracePeriod,
+                value: selectedPasswordExpirationPeriod,
+                onChanged: (value) async {
+                  await updateDocument('password_grace_period', value: value);
+                  setState(() => selectedPasswordExpirationPeriod = value);
+                },
+              ),
+              ConfigurationContainer(
+                'Idle Session timeoute (in minutes)',
+                items: idleSessionTimeout,
+                value: selectedIdleSession,
+                onChanged: (value) async {
+                  await updateDocument('idle_session_timeout', value: value);
+                  setState(() => selectedIdleSession = value);
+                },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(padding: const EdgeInsets.only(top: Sizes.p24)),
-                  Text("Settings").titleSmallBold,
-                  ConfigurationContainer(
-                    'Default Password Expiration Duration',
-                    items: passwordExpirationDurations,
-                    value: selectedPasswordExpiration,
-                    onChanged:
-                        (value) =>
-                            setState(() => selectedPasswordExpiration = value),
+                  Text('Mandatory Multi-Factor Authentication'),
+                  ToggleSwitch(
+                    checked: mfa,
+                    onChanged: (value) async {
+                      await updateDocument('mfa_status', mfa: value);
+                      setState(() => mfa = value);
+                    },
                   ),
-                  ConfigurationContainer(
-                    'Password Expiration Grace Period',
-                    items: passwordEpirationGracePeriod,
-                    value: selectedPasswordExpirationPeriod,
-                    onChanged:
-                        (value) => setState(
-                          () => selectedPasswordExpirationPeriod = value,
-                        ),
-                  ),
-                  ConfigurationContainer(
-                    'Idle Session timeoute (in minutes)',
-                    items: idleSessionTimeout,
-                    value: selectedIdleSession,
-                    onChanged:
-                        (value) => setState(() => selectedIdleSession = value),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Mandatory Multi-Factor Authentication'),
-                      ToggleSwitch(
-                        checked: mfa,
-                        onChanged: (value) {
-                          setState(() {
-                            mfa = value;
-                          });
-                        },
-                      ),
-                      SizedBox(width: 210),
-                    ],
-                  ),
-                  // Row(mainAxisAlignment: MainAxisAlignment.end),
+                  SizedBox(width: 210),
                 ],
               ),
-            ),
-          );
-        },
+              // Row(mainAxisAlignment: MainAxisAlignment.end),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -17,3 +17,9 @@ String getFunctionId(String name) {
 Status getStatus(String status) {
   return Status.values.firstWhere((e) => e.name == status);
 }
+
+String geteventId(String activity) {
+  return List.from(
+    eventIds['events'],
+  ).firstWhere((e) => e['activity'] == activity)['id'];
+}

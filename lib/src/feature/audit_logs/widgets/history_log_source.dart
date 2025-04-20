@@ -8,13 +8,24 @@ import 'package:intl/intl.dart';
 import 'package:admin/src/core/index.dart';
 
 class HistoryLogsSource extends AsyncDataTableSource {
+  final List<String>? queries;
+
+  HistoryLogsSource({this.queries});
+
   @override
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
     try {
+      final mergedQueries = [
+        ...?queries,
+        Query.offset(startIndex),
+        Query.limit(count),
+      ];
+      logger.info('queries: ${mergedQueries.toString()}');
+
       final response = await database.listDocuments(
         databaseId: databaseId,
         collectionId: getCollectionId('logs'),
-        queries: [Query.offset(startIndex), Query.limit(count)],
+        queries: mergedQueries,
       );
 
       final total = response.total;
@@ -22,21 +33,23 @@ class HistoryLogsSource extends AsyncDataTableSource {
           response.documents.map((f) {
             final d = f.data;
             final createdAt = DateFormat(
-              "YYYY-MM-DD",
-            ).format(DateTime.parse(f.$createdAt));
+              "yyyy-MM-dd",
+            ).format(DateTime.parse(f.$createdAt).toLocal());
             final time = DateFormat(
               "HH:MM",
-            ).format(DateTime.parse(f.$createdAt));
+            ).format(DateTime.parse(f.$createdAt).toLocal());
+
+            final event =
+                "${d['event']['method']} - ${d['event']['resource']} - ${d['event']['activity']}";
             return DataRow2(
               cells: [
                 m3.DataCell(Text(d['user']['\$id'])),
                 m3.DataCell(Text(d['user']['readable_name'])),
                 m3.DataCell(Text(d['user']['email'])),
                 m3.DataCell(Text(d['user']['role']['key'])),
-                m3.DataCell(Text(d['event'])),
+                m3.DataCell(Text(event)),
                 m3.DataCell(Text(createdAt)),
                 m3.DataCell(Text(time)),
-                m3.DataCell(Text(d['resource'] ?? '')),
                 m3.DataCell(Text(d['device'])),
                 m3.DataCell(Text(d['location'])),
               ],

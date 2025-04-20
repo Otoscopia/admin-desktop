@@ -7,11 +7,9 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/enums.dart';
 import 'package:appwrite/models.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:isar/isar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:admin/src/core/index.dart';
-import 'package:admin/src/core/models/user_model.dart';
 
 part 'authentication_provider.g.dart';
 
@@ -19,23 +17,7 @@ part 'authentication_provider.g.dart';
 class Authentication extends _$Authentication {
   @override
   AuthenticationEntity build() {
-    if (!kIsWeb) logger.info("Initializing authentication...");
-
-    final initialState = AuthenticationEntity(isLoading: false, user: null);
-
-    final user = isar.userModels.where().findFirst()?.toEntity();
-
-    if (!kIsWeb) logger.info("Authentication Initialized...");
-
-    if (user != null) {
-      initializeAppwriteIds(
-        collections: user.collectionIds,
-        storages: user.storageIds,
-        functions: user.functionIds,
-      );
-    }
-
-    return initialState.copyWith(user: user);
+    return AuthenticationEntity(isLoading: false, user: null);
   }
 
   Future<void> signIn({required String email, required String password}) async {
@@ -47,19 +29,15 @@ class Authentication extends _$Authentication {
         password: password,
       );
 
-      await initializeAppwriteInjector(response);
-
-      final List<dynamic> collections = List.from(collectionIds['collections']);
-
-      final usersId =
-          collections
-              .where((collection) => collection['name'] == 'users')
-              .first;
-
       final userResponse = await database.getDocument(
-        databaseId: collectionIds['database'],
-        collectionId: usersId['id']!,
+        databaseId: Env.database,
+        collectionId: Env.users,
         documentId: response.userId,
+      );
+
+      await initializeAppwriteInjector(
+        response,
+        userResponse.data['role']['\$id'],
       );
 
       final user = UserEntity.fromAppwrite(
@@ -68,13 +46,8 @@ class Authentication extends _$Authentication {
         collectionIds: collectionIds,
         storageIds: storageIds,
         functionIds: functionIds,
+        eventIds: eventIds,
       );
-
-      final model = UserModel.fromEntity(user)..id = 0;
-
-      await isar.writeAsync((isar) {
-        return isar.userModels.put(model);
-      });
 
       state = state.copyWith(isLoading: false, user: user);
     } on AppwriteException catch (error, stackTrace) {
@@ -94,10 +67,7 @@ class Authentication extends _$Authentication {
     if (!kIsWeb) logger.info("Signing user out...");
     state = state.copyWith(isLoading: true);
     try {
-      account.deleteSession(sessionId: state.user!.session!);
-      await isar.writeAsync((isar) {
-        return isar.userModels.delete(0);
-      });
+      await account.deleteSession(sessionId: state.user!.session!);
     } on AppwriteException catch (error, stackTrace) {
       logger.error("Error signing out user: ${error.message}");
       throw Exception([error.message, stackTrace]);
@@ -111,7 +81,7 @@ class Authentication extends _$Authentication {
     }
   }
 
-  Future<void> initializeAppwriteInjector(Session? session) async {
+  Future<void> initializeAppwriteInjector(Session? session, String role) async {
     try {
       late final Execution response;
 
@@ -129,10 +99,11 @@ class Authentication extends _$Authentication {
 
       final body = {
         'user': session?.userId,
+        'role': role,
         'location': session?.countryName,
         'ip': session?.ip,
         'device': info,
-        'resource': 'authentication',
+        'resource': '6803beaf00232580b773',
       };
 
       response = await functions.createExecution(
@@ -148,6 +119,7 @@ class Authentication extends _$Authentication {
         collections: jsonResponse['databases'],
         storages: jsonResponse['buckets'],
         functions: jsonResponse['functions'],
+        events: jsonResponse['events'],
       );
     } catch (error) {
       logger.error(
@@ -160,9 +132,11 @@ class Authentication extends _$Authentication {
     required collections,
     required storages,
     required functions,
+    required events,
   }) {
     collectionIds = collections;
     storageIds = storages;
     functionIds = functions;
+    eventIds = events;
   }
 }

@@ -2,9 +2,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:admin/src/core/index.dart';
-
-import '../pages/manage_user_page.dart';
-import '../pages/user_tab_page.dart';
+import 'package:admin/src/feature/user_management/pages/manage_user_page.dart';
+import 'package:admin/src/feature/user_management/pages/user_tab_page.dart';
 
 class UserTabs extends ConsumerStatefulWidget {
   const UserTabs({super.key});

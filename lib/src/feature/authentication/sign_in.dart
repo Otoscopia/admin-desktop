@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:admin/src/config/index.dart';
 import 'package:admin/src/core/index.dart';
-import 'package:admin/src/feature/authentication/sign_up.dart';
 
 class SignIn extends ConsumerStatefulWidget {
   const SignIn({super.key});
@@ -37,7 +36,8 @@ class _SignInState extends ConsumerState<SignIn> {
                   child: Stack(
                     children: [
                       Transform.rotate(
-                        angle: -10 *
+                        angle:
+                            -10 *
                             3.141592653589793 /
                             180, // 10 degrees in radians
                         child: Image.asset(
@@ -47,7 +47,8 @@ class _SignInState extends ConsumerState<SignIn> {
                         ),
                       ),
                       Transform.rotate(
-                        angle: 169 *
+                        angle:
+                            169 *
                             3.141592653589793 /
                             180, // 169 degrees in radians
                         child: Image.asset(
@@ -88,16 +89,6 @@ class _SignInState extends ConsumerState<SignIn> {
                             label: "Password",
                             placeholder: "otoscopia2023!",
                           ),
-                          Row(
-                            spacing: 8,
-                            children: [
-                              Text("No account?"),
-                              HyperlinkButton(
-                                child: Text('Sign up'),
-                                onPressed: () => context.push(SignUp()),
-                              )
-                            ],
-                          ),
                           if (auth.isLoading)
                             ProgressRing()
                           else
@@ -114,7 +105,8 @@ class _SignInState extends ConsumerState<SignIn> {
                                     builder: (context, close) {
                                       return InfoBar(
                                         title: Text(
-                                            "Ohh oh! Something went wrong."),
+                                          "Ohh oh! Something went wrong.",
+                                        ),
                                         content: Text(error.toString()),
                                         severity: InfoBarSeverity.error,
                                         isLong: true,
@@ -130,7 +122,7 @@ class _SignInState extends ConsumerState<SignIn> {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

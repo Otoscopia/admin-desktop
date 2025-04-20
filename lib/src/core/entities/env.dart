@@ -15,4 +15,10 @@ abstract class Env {
 
   @EnviedField(varName: "APPWRITE_INJECTOR", obfuscate: true)
   static final String appwriteInjector = _Env.appwriteInjector;
+
+  @EnviedField(varName: "APPWRITE_USERS", obfuscate: true)
+  static final String users = _Env.users;
+
+  @EnviedField(varName: "APPWRITE_DATABASE", obfuscate: true)
+  static final String database = _Env.database;
 }

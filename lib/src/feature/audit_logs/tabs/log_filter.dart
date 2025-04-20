@@ -1,3 +1,5 @@
+import 'package:appwrite/appwrite.dart' as ap;
+import 'package:appwrite/models.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,18 +9,22 @@ import 'package:admin/src/feature/audit_logs/widgets/filter_container.dart';
 import 'package:admin/src/feature/audit_logs/widgets/history_log_source.dart';
 
 class LogFilter extends ConsumerStatefulWidget {
-  const LogFilter({super.key});
+  final List<Document>? roles;
+  final List<Document>? events;
+
+  const LogFilter({super.key, this.roles, this.events});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LogFilterState();
 }
 
 class _LogFilterState extends ConsumerState<LogFilter> {
-  final source = HistoryLogsSource();
+  late HistoryLogsSource source;
   DateTime? startDate;
   DateTime? endDate;
   String? userRole;
   String? userActivity;
+  bool isSubmitted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +44,7 @@ class _LogFilterState extends ConsumerState<LogFilter> {
             DatePicker(
               selected: endDate,
               onChanged: (value) {
-                setState(() {
-                  endDate = value;
-                });
+                setState(() => endDate = value);
               },
             ),
           ],
@@ -52,10 +56,11 @@ class _LogFilterState extends ConsumerState<LogFilter> {
             ComboBox(
               value: userRole,
               items:
-                  Role.values.map((r) {
-                    final role = r.name;
+                  widget.roles?.map((e) {
+                    final id = e.$id;
+                    final role = e.data['key'] as String;
                     return ComboBoxItem(
-                      value: role,
+                      value: id,
                       child: Text(role.uppercaseFirst()),
                     );
                   }).toList(),
@@ -68,12 +73,20 @@ class _LogFilterState extends ConsumerState<LogFilter> {
             ),
             ComboBox(
               value: userActivity,
-              items: [
-                ComboBoxItem(value: 'admin', child: Text('admin')),
-                ComboBoxItem(value: 'doctor', child: Text('doctor')),
-                ComboBoxItem(value: 'nurse', child: Text('nurse')),
-                ComboBoxItem(value: 'parent', child: Text('parent')),
-              ],
+              items:
+                  widget.events?.map((e) {
+                    final id = e.$id;
+                    final event = e.data;
+                    final method = (event['method'] as String).uppercaseFirst();
+                    final resource =
+                        (event['resource'] as String).uppercaseFirst();
+                    final activity =
+                        (event['activity'] as String).uppercaseFirst();
+                    return ComboBoxItem(
+                      value: id,
+                      child: Text("$method - $resource - $activity"),
+                    );
+                  }).toList(),
               isExpanded: true,
               onChanged: (value) {
                 setState(() {
@@ -94,40 +107,48 @@ class _LogFilterState extends ConsumerState<LogFilter> {
         gap16,
         SizedBox(
           width: 330,
-          child: FilledButton(child: Text('Submit'), onPressed: () {}),
-        ),
-        gap16,
-        SizedBox(
-          height: 1100,
-          child: AsyncPaginatedDataTable2(
-            source: source,
-            minWidth: 2000,
-            rowsPerPage: 20,
-            columns: [
-              DataColumn2(label: Text('User ID'), size: ColumnSize.L),
-              DataColumn2(label: Text('Name'), size: ColumnSize.L),
-              DataColumn2(label: Text('Email'), size: ColumnSize.L),
-              DataColumn2(label: Text('Role'), size: ColumnSize.S),
-              DataColumn2(label: Text('Activity'), size: ColumnSize.L),
-              DataColumn2(label: Text('Date')),
-              DataColumn2(label: Text('Time')),
-              DataColumn2(label: Text('Resource')),
-              DataColumn2(label: Text('Device')),
-              DataColumn2(label: Text('Location')),
-            ],
-            loading: Center(child: ProgressBar()),
-            empty: Center(child: Text('No data found')),
-            errorBuilder:
-                (e) => Center(
-                  child: Text(
-                    'Error: ${e.toString()}',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
+          child: FilledButton(
+            child: Text('Submit'),
+            onPressed: () async {
+              source = HistoryLogsSource(
+                queries: [
+                  if (startDate != null && endDate != null)
+                    ap.Query.between(
+                      '\$createdAt',
+                      startDate?.toIso8601String(),
+                      endDate?.toIso8601String(),
+                    ),
+                  if (userRole != null) ap.Query.equal('role', userRole),
+                  if (userActivity != null)
+                    ap.Query.equal('event', userActivity),
+                ],
+              );
+
+              setState(() => isSubmitted = true);
+            },
           ),
         ),
+        if (isSubmitted) gap16,
+        if (isSubmitted)
+          SizedBox(
+            height: 700,
+            child: AsyncTable(
+              source: source,
+              minWidth: 2000,
+              columns: [
+                DataColumn2(label: Text('User ID'), size: ColumnSize.L),
+                DataColumn2(label: Text('Name'), size: ColumnSize.L),
+                DataColumn2(label: Text('Email'), size: ColumnSize.L),
+                DataColumn2(label: Text('Role'), size: ColumnSize.S),
+                DataColumn2(label: Text('Activity'), size: ColumnSize.L),
+                DataColumn2(label: Text('Date'), size: ColumnSize.S),
+                DataColumn2(label: Text('Time'), size: ColumnSize.S),
+                DataColumn2(label: Text('Device')),
+                DataColumn2(label: Text('Location')),
+              ],
+            ),
+          ),
       ],
-      // ),
     );
   }
 }

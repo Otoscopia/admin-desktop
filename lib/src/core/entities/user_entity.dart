@@ -18,6 +18,7 @@ class UserEntity {
   final bool isEmailVerified;
   final DateTime lastPasswordUpdated;
   final Role role;
+  final String roleId;
   final Gender gender;
   final Status activityStatus;
   final Status accountStatus;
@@ -28,6 +29,7 @@ class UserEntity {
   final Map<String, dynamic> collectionIds;
   final Map<String, dynamic> functionIds;
   final Map<String, dynamic> storageIds;
+  final Map<String, dynamic> eventIds;
   final DateTime? deactivationTime;
   final String? session;
   final String? location;
@@ -46,6 +48,7 @@ class UserEntity {
     required this.isEmailVerified,
     required this.lastPasswordUpdated,
     required this.role,
+    required this.roleId,
     required this.gender,
     required this.activityStatus,
     required this.accountStatus,
@@ -55,6 +58,7 @@ class UserEntity {
     required this.collectionIds,
     required this.functionIds,
     required this.storageIds,
+    required this.eventIds,
     this.session,
     this.location,
     this.ip,
@@ -75,6 +79,7 @@ class UserEntity {
     bool? isEmailVerified,
     DateTime? lastPasswordUpdated,
     Role? role,
+    String? roleId,
     Gender? gender,
     Status? activityStatus,
     Status? accountStatus,
@@ -85,6 +90,7 @@ class UserEntity {
     Map<String, dynamic>? collectionIds,
     Map<String, dynamic>? functionIds,
     Map<String, dynamic>? storageIds,
+    Map<String, dynamic>? eventIds,
     String? session,
     String? location,
     String? ip,
@@ -102,6 +108,7 @@ class UserEntity {
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       lastPasswordUpdated: lastPasswordUpdated ?? this.lastPasswordUpdated,
       role: role ?? this.role,
+      roleId: roleId ?? this.roleId,
       gender: gender ?? this.gender,
       activityStatus: activityStatus ?? this.activityStatus,
       accountStatus: accountStatus ?? this.accountStatus,
@@ -111,6 +118,7 @@ class UserEntity {
       passwordExpiration: passwordExpiration ?? this.passwordExpiration,
       collectionIds: collectionIds ?? this.collectionIds,
       functionIds: functionIds ?? this.functionIds,
+      eventIds: eventIds ?? this.eventIds,
       storageIds: storageIds ?? this.storageIds,
       session: session ?? this.session,
       location: location ?? this.location,
@@ -149,6 +157,7 @@ class UserEntity {
     required Map<String, dynamic> collectionIds,
     required Map<String, dynamic> functionIds,
     required Map<String, dynamic> storageIds,
+    required Map<String, dynamic> eventIds,
   }) {
     Map<String, dynamic> data = user.data;
     final role = data['role']['key'];
@@ -167,6 +176,7 @@ class UserEntity {
       contactNumber: data['contact_number'],
       workAddress: data['work_address'],
       role: Role.values.firstWhere((r) => r.name.contains(role)),
+      roleId: data['role']['\$id'],
       gender: Gender.values.firstWhere((g) => g.name.contains(gender)),
       mfaEnabled: data['mfa_enabled'],
       isVerified: data['is_verified'],
@@ -184,6 +194,7 @@ class UserEntity {
       collectionIds: collectionIds,
       functionIds: functionIds,
       storageIds: storageIds,
+      eventIds: eventIds,
       session: session.$id,
       location: session.countryName,
       ip: session.ip,

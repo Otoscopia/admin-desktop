@@ -7,13 +7,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:intl/intl.dart';
-import 'package:isar/isar.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:admin/src/core/index.dart';
-import 'package:admin/src/core/models/user_model.dart';
 
 late final Logger logger;
 late final Account account;
@@ -24,7 +22,7 @@ late final Realtime realtime;
 late Map<String, dynamic> collectionIds;
 late Map<String, dynamic> functionIds;
 late Map<String, dynamic> storageIds;
-late final Isar isar;
+late Map<String, dynamic> eventIds;
 late final Directory appDir;
 late final BaseDeviceInfo device;
 
@@ -46,7 +44,6 @@ class DependencyInjector {
     }
 
     await appwriteManager();
-    await isarManager();
 
     await deviceInfoManager();
 
@@ -109,28 +106,6 @@ class DependencyInjector {
     storage = Storage(client);
     functions = Functions(client);
     realtime = Realtime(client);
-  }
-
-  Future<void> isarManager() async {
-    const schemas = [UserModelSchema];
-
-    if (!kIsWeb) logger.info("Setting up Isar storage...");
-
-    if (kIsWeb) {
-      await Isar.initialize();
-
-      isar = Isar.open(
-        schemas: schemas,
-        directory: Isar.sqliteInMemory,
-        engine: IsarEngine.sqlite,
-      );
-    } else {
-      isar = await Isar.openAsync(
-        schemas: schemas,
-        directory: "${appDir.path}/Otoscopia",
-        name: "Otoscopia",
-      );
-    }
   }
 
   Future<void> deviceInfoManager() async {

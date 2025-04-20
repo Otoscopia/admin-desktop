@@ -2,7 +2,7 @@ import 'package:appwrite/models.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:admin/src/core/index.dart';
-import 'package:admin/src/feature/user_management/user_management.dart';
+import 'package:admin/src/feature/user_management/widget/account_status.dart';
 
 class UserAccountStatus extends StatefulWidget {
   const UserAccountStatus(this.user, {super.key});
