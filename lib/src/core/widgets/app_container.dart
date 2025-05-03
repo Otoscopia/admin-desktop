@@ -47,17 +47,17 @@ class _AppContainerState extends ConsumerState<AppContainer>
         context: context,
         builder: (_) {
           return ContentDialog(
-            title: Text('Confirm close'),
+            title: const Text('Confirm close'),
             content: const Text('Are you sure you want to close this window?'),
             actions: [
               Button(
-                child: Text('No'),
+                child: const Text('No'),
                 onPressed: () {
                   context.pop();
                 },
               ),
               FilledButton(
-                child: Text('Yes'),
+                child: const Text('Yes'),
                 onPressed: () async {
                   try {
                     await ref.read(authenticationProvider.notifier).signOut();
@@ -90,7 +90,7 @@ class _AppContainerState extends ConsumerState<AppContainer>
   NavigationAppBar appBar(BuildContext context) {
     return NavigationAppBar(
       automaticallyImplyLeading: false,
-      title: DragToMoveArea(
+      title: const DragToMoveArea(
         child: Align(
           alignment: AlignmentDirectional.centerStart,
           child: Text("Otoscopia Admin"),
@@ -100,7 +100,7 @@ class _AppContainerState extends ConsumerState<AppContainer>
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: ToggleSwitch(
               checked: context.isDark,
               onChanged: (v) {

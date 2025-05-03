@@ -21,14 +21,15 @@ Future<void> main() async {
         options.tracesSampleRate = 1.0;
         options.profilesSampleRate = 1.0;
       },
-      appRunner: () => runApp(
-        ProviderScope(
-          child: DefaultAssetBundle(
-            bundle: SentryAssetBundle(),
-            child: const MyApp(),
+      appRunner:
+          () => runApp(
+            ProviderScope(
+              child: DefaultAssetBundle(
+                bundle: SentryAssetBundle(),
+                child: const MyApp(),
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 

@@ -12,6 +12,6 @@ extension TextExtension on Text {
   );
   Text get caption => Text(
     data!,
-    style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
   );
 }

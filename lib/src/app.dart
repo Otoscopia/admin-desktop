@@ -41,7 +41,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                   final auth = ref.watch(authenticationProvider);
 
                   return PageContainer(
-                    content: auth.user != null ? Admin() : SignIn(),
+                    content: auth.user != null ? const Admin() : const SignIn(),
                   );
                 },
               )
@@ -50,7 +50,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                   final auth = ref.watch(authenticationProvider);
 
                   return PageContainer(
-                    content: auth.user != null ? Admin() : SignIn(),
+                    content: auth.user != null ? const Admin() : const SignIn(),
                   );
                 },
               ),

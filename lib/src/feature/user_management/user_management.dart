@@ -15,7 +15,7 @@ class UserManagement extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return TabPages(
+    return const TabPages(
       icons: [FluentIcons.user_sync, FluentIcons.data_management_settings],
       tabTitles: ['Account Lifecycle', 'Configuration'],
       bodies: [UserTabs(), AuthenticationConfiguration()],

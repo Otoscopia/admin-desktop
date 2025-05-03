@@ -54,7 +54,7 @@ class _ManageUserPageState extends ConsumerState<ManageUserPage> {
                           switchTitle: "Reactivate Immediately",
                           switchValue: data.activateImmediately ?? false,
                         ),
-                        Divider(),
+                        const Divider(),
                         AccountStatus(
                           'Deactivation Details',
                           userId: widget.uid,
@@ -72,7 +72,7 @@ class _ManageUserPageState extends ConsumerState<ManageUserPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     FilledButton(
-                      child: Text('Save'),
+                      child: const Text('Save'),
                       onPressed: () async {
                         final logging = ref
                             .read(authenticationProvider)
@@ -102,14 +102,12 @@ class _ManageUserPageState extends ConsumerState<ManageUserPage> {
               children: [
                 Text("Something went wrong: ${error.toString()}"),
                 gap16,
-                FilledButton(child: Text("Retry"), onPressed: () {}),
+                FilledButton(child: const Text("Retry"), onPressed: () {}),
               ],
             ),
           );
         },
-        loading: () {
-          return Center(child: ProgressBar());
-        },
+        loading: () => const LoadingPage(),
       ),
     );
   }

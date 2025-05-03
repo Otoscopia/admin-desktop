@@ -34,16 +34,13 @@ class _CustomTextBoxState extends State<CustomTextBox> {
         suffix: widget.suffix,
         prefix: widget.prefix,
         obscureText: widget.obscureText,
-        placeholderStyle: TextStyle(fontSize: 16),
-        style: TextStyle(fontSize: 18),
+        placeholderStyle: const TextStyle(fontSize: 16),
+        style: const TextStyle(fontSize: 18),
       ),
     );
 
     if (widget.label != null) {
-      return InfoLabel(
-        label: widget.label!,
-        child: textbox,
-      );
+      return InfoLabel(label: widget.label!, child: textbox);
     }
 
     return textbox;

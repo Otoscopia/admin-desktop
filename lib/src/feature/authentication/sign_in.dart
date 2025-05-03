@@ -29,7 +29,7 @@ class _SignInState extends ConsumerState<SignIn> {
         child: Stack(
           children: [
             SizedBox.fromSize(
-              size: Size(double.infinity, 230),
+              size: const Size(double.infinity, 230),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: ColoredBox(
@@ -91,10 +91,10 @@ class _SignInState extends ConsumerState<SignIn> {
                             placeholder: "otoscopia2023!",
                           ),
                           if (auth.isLoading)
-                            ProgressRing()
+                            const ProgressRing()
                           else
                             FilledButton(
-                              child: Text("Sign in"),
+                              child: const Text("Sign in"),
                               onPressed: () async {
                                 try {
                                   await ref
@@ -107,9 +107,10 @@ class _SignInState extends ConsumerState<SignIn> {
                                         builder:
                                             (context) => AppContainer(
                                               onLoaded:
-                                                  (context) => PageContainer(
-                                                    content: Admin(),
-                                                  ),
+                                                  (context) =>
+                                                      const PageContainer(
+                                                        content: Admin(),
+                                                      ),
                                             ),
                                       ),
                                       (route) => false,
@@ -118,19 +119,23 @@ class _SignInState extends ConsumerState<SignIn> {
 
                                   setState(() {});
                                 } catch (error) {
-                                  await displayInfoBar(
-                                    context,
-                                    builder: (context, close) {
-                                      return InfoBar(
-                                        title: Text(
-                                          "Ohh oh! Something went wrong.",
-                                        ),
-                                        content: Text(error.toString()),
-                                        severity: InfoBarSeverity.error,
-                                        isLong: true,
-                                      );
-                                    },
-                                  );
+                                  WidgetsBinding.instance.addPostFrameCallback((
+                                    _,
+                                  ) {
+                                    displayInfoBar(
+                                      context,
+                                      builder: (context, close) {
+                                        return InfoBar(
+                                          title: const Text(
+                                            "Ohh oh! Something went wrong.",
+                                          ),
+                                          content: Text(error.toString()),
+                                          severity: InfoBarSeverity.error,
+                                          isLong: true,
+                                        );
+                                      },
+                                    );
+                                  });
                                 }
                               },
                             ),

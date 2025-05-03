@@ -184,9 +184,9 @@ class Dashboard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Number of Patients Per School',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           gap24,
           SizedBox(
@@ -207,7 +207,7 @@ class Dashboard extends ConsumerWidget {
                     },
                   ),
                 ),
-                titlesData: FlTitlesData(
+                titlesData: const FlTitlesData(
                   show: true,
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
@@ -215,10 +215,10 @@ class Dashboard extends ConsumerWidget {
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
                   ),
-                  topTitles: const AxisTitles(
+                  topTitles: AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
                   ),
-                  rightTitles: const AxisTitles(
+                  rightTitles: AxisTitles(
                     sideTitles: SideTitles(showTitles: false),
                   ),
                 ),
@@ -275,9 +275,9 @@ class Dashboard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Recent Activity',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           gap16,
           activities.isEmpty

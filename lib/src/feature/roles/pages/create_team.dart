@@ -32,7 +32,6 @@ class CreateTeamState extends ConsumerState<CreateTeam> {
   String selectedRoleName = '';
   List<String> users = [];
   List<String> unselectedMember = [];
-  final permissions = ['read', 'write', 'update', 'delete'];
   List<String> selectedPermissions = [];
   bool? timeBased = false;
   DateTime? startTime = DateTime.now();
@@ -91,7 +90,7 @@ class CreateTeamState extends ConsumerState<CreateTeam> {
 
     return ScaffoldPage.scrollable(
       children: [
-        Text("Team Name"),
+        const Text("Team Name"),
         gap8,
         SizedBox(
           width: 400,
@@ -108,7 +107,7 @@ class CreateTeamState extends ConsumerState<CreateTeam> {
 
         gap16,
 
-        Text("Team Description"),
+        const Text("Team Description"),
         gap8,
         SizedBox(
           height: 100.0,
@@ -127,8 +126,8 @@ class CreateTeamState extends ConsumerState<CreateTeam> {
         gap16,
         if (!widget.isEditing)
           Expander(
-            header: Text("Select Role Assignment"),
-            leading: Icon(FluentIcons.c_r_m_services),
+            header: const Text("Select Role Assignment"),
+            leading: const Icon(FluentIcons.c_r_m_services),
             trailing: Text(selectedRoleName),
             content: SizedBox(
               height: 215,
@@ -161,9 +160,9 @@ class CreateTeamState extends ConsumerState<CreateTeam> {
           ),
         gap16,
         Expander(
-          leading: Icon(FluentIcons.people_add),
+          leading: const Icon(FluentIcons.people_add),
           trailing: Text(users.length.toString()),
-          header: Text("Select Team Member"),
+          header: const Text("Select Team Member"),
           content: SizedBox(
             width: 330,
             child: Column(
@@ -214,8 +213,8 @@ class CreateTeamState extends ConsumerState<CreateTeam> {
         ),
         gap16,
         Expander(
-          leading: Icon(FluentIcons.permissions_solid),
-          header: Text("Permissions"),
+          leading: const Icon(FluentIcons.permissions_solid),
+          header: const Text("Permissions"),
           content: SizedBox(
             height: 180,
             child: ListView.builder(
@@ -246,11 +245,11 @@ class CreateTeamState extends ConsumerState<CreateTeam> {
         gap16,
         Expander(
           key: expanderKey,
-          leading: Icon(FluentIcons.time_picker),
-          header: Text("Time-Based Access"),
+          leading: const Icon(FluentIcons.time_picker),
+          header: const Text("Time-Based Access"),
           enabled: timeBased == true,
           trailing: Checkbox(
-            content: Text('Enable Time-Based Access'),
+            content: const Text('Enable Time-Based Access'),
             checked: timeBased,
             onChanged: (value) {
               final open = expanderKey.currentState?.isExpanded ?? false;

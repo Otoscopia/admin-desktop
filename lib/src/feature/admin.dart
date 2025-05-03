@@ -25,7 +25,7 @@ class _AdminState extends ConsumerState<Admin> {
       child: NavigationView(
         pane: NavigationPane(
           selected: index,
-          header: Text("Otoscopia"),
+          header: const Text("Otoscopia"),
           onItemPressed: (int i) {
             setState(() {
               index = i;
@@ -33,47 +33,49 @@ class _AdminState extends ConsumerState<Admin> {
           },
           items: [
             PaneItem(
-              icon: Icon(FluentIcons.view_dashboard),
-              title: Text("Dashboard"),
-              body: Dashboard(),
+              icon: const Icon(FluentIcons.view_dashboard),
+              title: const Text("Dashboard"),
+              body: const Dashboard(),
             ),
             PaneItem(
-              icon: Icon(FluentIcons.people),
-              title: Text("Users Management"),
-              body: UserManagement(),
+              icon: const Icon(FluentIcons.people),
+              title: const Text("Users Management"),
+              body: const UserManagement(),
             ),
             PaneItem(
-              icon: Icon(FluentIcons.cloud_secure),
-              title: Text("Access Controll"),
-              body: TabPages(
+              icon: const Icon(FluentIcons.cloud_secure),
+              title: const Text("Access Controll"),
+              body: const TabPages(
                 tabTitles: ['Role Assignment', 'Roles'],
                 icons: [FluentIcons.temporary_user, FluentIcons.user_window],
                 bodies: [RoleAssignment(), RolesTab()],
               ),
             ),
             PaneItem(
-              icon: Icon(FluentIcons.history),
-              title: Text("Audit Logs"),
-              body: AuditLogs(),
+              icon: const Icon(FluentIcons.history),
+              title: const Text("Audit Logs"),
+              body: const AuditLogs(),
             ),
           ],
           footerItems: [
             PaneItemAction(
-              icon: Icon(FluentIcons.rocket),
-              title: Text("What's New"),
+              icon: const Icon(FluentIcons.rocket),
+              title: const Text("What's New"),
               onTap: () {
                 showDialog(
                   context: context,
                   builder: (context) {
                     return ContentDialog(
-                      title: Text("What's New"),
-                      content: Text("This is the latest version of Otoscopia."),
+                      title: const Text("What's New"),
+                      content: const Text(
+                        "This is the latest version of Otoscopia.",
+                      ),
                       actions: [
                         Button(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text("Close"),
+                          child: const Text("Close"),
                         ),
                       ],
                     );
@@ -82,13 +84,13 @@ class _AdminState extends ConsumerState<Admin> {
               },
             ),
             PaneItem(
-              icon: Icon(FluentIcons.settings),
-              title: Text("Settings"),
-              body: Settings(),
+              icon: const Icon(FluentIcons.settings),
+              title: const Text("Settings"),
+              body: const Settings(),
             ),
             PaneItemAction(
-              icon: Icon(FluentIcons.external_build),
-              title: Text("Sign-out"),
+              icon: const Icon(FluentIcons.external_build),
+              title: const Text("Sign-out"),
               onTap: () async {
                 final user = ref.read(authenticationProvider);
                 if (user.user != null) {
@@ -101,7 +103,8 @@ class _AdminState extends ConsumerState<Admin> {
                       builder:
                           (context) => AppContainer(
                             onLoaded:
-                                (context) => PageContainer(content: SignIn()),
+                                (context) =>
+                                    const PageContainer(content: SignIn()),
                           ),
                     ),
                     (route) => false,

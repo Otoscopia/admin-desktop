@@ -29,18 +29,13 @@ class StatusPill extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(9999),
                   child: ColoredBox(
                     color: statusColor['circle']!,
-                    child: SizedBox(
-                      width: 8,
-                      height: 8,
-                    ),
+                    child: const SizedBox(width: 8, height: 8),
                   ),
                 ),
               ),
               Text(
                 status.name.uppercaseFirst(),
-                style: TextStyle(
-                  color: statusColor['text']!,
-                ),
+                style: TextStyle(color: statusColor['text']!),
               ),
             ],
           ),

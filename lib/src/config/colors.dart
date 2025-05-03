@@ -36,9 +36,9 @@ class AppColors {
     'unverified': _statusColors['negative'],
     'disabled': _statusColors['negative'],
     'offline': {
-      'text': Color(0xFF364254),
-      'circle': Color(0xFF6C778B),
-      'background': Color(0xFFF2F4F7),
+      'text': const Color(0xFF364254),
+      'circle': const Color(0xFF6C778B),
+      'background': const Color(0xFFF2F4F7),
     },
   };
 }

@@ -21,25 +21,6 @@ class _CheckAccessState extends ConsumerState<CheckAccess> {
   final deniedPermission = 0;
   final controller = TextEditingController();
 
-  loadingFn() {
-    return ScaffoldPage(content: Center(child: ProgressBar()));
-  }
-
-  errorFn(error, stackTrace) {
-    return ScaffoldPage(
-      content: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Something went wrong: ${error.toString()}"),
-            gap16,
-            FilledButton(child: Text("Retry"), onPressed: () {}),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final users = ref.watch(fetchUsersProvider);
@@ -57,7 +38,7 @@ class _CheckAccessState extends ConsumerState<CheckAccess> {
 
         return ScaffoldPage.scrollable(
           children: [
-            Text("Check Access").titleSmallBold,
+            const Text("Check Access").titleSmallBold,
             gap24,
             SizedBox(
               width: 330,
@@ -85,13 +66,6 @@ class _CheckAccessState extends ConsumerState<CheckAccess> {
                       final roleName = role['key'] as String;
                       final permissions = List.from(role['permissions']);
 
-                      final permissionTypes = [
-                        {'type': 'read', 'label': 'Read Permission'},
-                        {'type': 'create', 'label': 'Write Permission'},
-                        {'type': 'update', 'label': 'Update Permission'},
-                        {'type': 'delete', 'label': 'Delete Permission'},
-                      ];
-
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -114,7 +88,7 @@ class _CheckAccessState extends ConsumerState<CheckAccess> {
                                   ),
                                   content: m3.Material(
                                     child: m3.DataTable(
-                                      columns: [
+                                      columns: const [
                                         m3.DataColumn(label: Text("Name")),
                                         m3.DataColumn(
                                           label: Text("Description"),
@@ -149,19 +123,19 @@ class _CheckAccessState extends ConsumerState<CheckAccess> {
                               Text("Something went wrong: ${error.toString()}"),
                               gap16,
                               FilledButton(
-                                child: Text("Retry"),
+                                child: const Text("Retry"),
                                 onPressed: () {},
                               ),
                             ],
                           ),
                         ),
-                    loading: () => Center(child: ProgressBar()),
+                    loading: () => const LoadingPage(),
                   ),
           ],
         );
       },
-      error: (error, stackTrace) => errorFn(error, stackTrace),
-      loading: () => loadingFn(),
+      error: (error, stackTrace) => ErrorPage(erorrMessage: error.toString()),
+      loading: () => const LoadingPage(),
     );
   }
 }

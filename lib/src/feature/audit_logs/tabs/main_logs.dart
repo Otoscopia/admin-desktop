@@ -18,7 +18,7 @@ class _MainLogsState extends ConsumerState<MainLogs> {
   @override
   Widget build(BuildContext context) {
     return AsyncTable(
-      columns: [
+      columns: const [
         DataColumn2(label: Text('User ID'), size: ColumnSize.M),
         DataColumn2(label: Text('Name'), size: ColumnSize.L),
         DataColumn2(label: Text('Email'), size: ColumnSize.L),

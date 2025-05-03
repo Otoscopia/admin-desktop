@@ -10,7 +10,7 @@ class RolesTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ScaffoldPage(
+    return const ScaffoldPage(
       padding: EdgeInsets.zero,
       content: TabPages(
         tabTitles: ["Check Access", "View Roles"],

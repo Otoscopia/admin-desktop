@@ -20,7 +20,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
   final Map<String, FlyoutController> _flyoutTeamControllers = {};
 
   Future<List<DocumentList?>> fetchData() async {
-    final fetchCollections = ['roles', 'users', 'teams'];
+    const fetchCollections = ['roles', 'users', 'teams'];
     final userQuery = Query.contains('readable_name', controller.text);
 
     return await Future.wait(
@@ -44,7 +44,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
         context,
         builder: (context, close) {
           return InfoBar(
-            title: Text("Success"),
+            title: const Text("Success"),
             content: Text("Team ${teamData.name} created successfully"),
             severity: InfoBarSeverity.success,
             isLong: true,
@@ -57,7 +57,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
         context,
         builder: (context, close) {
           return InfoBar(
-            title: Text("Something went wrong!"),
+            title: const Text("Something went wrong!"),
             content: Text("Unable to create team: ${e.message}"),
             severity: InfoBarSeverity.error,
             isLong: true,
@@ -78,7 +78,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
         context,
         builder: (context, close) {
           return InfoBar(
-            title: Text("Success"),
+            title: const Text("Success"),
             content: Text("Team ${teamData.name} edited successfully"),
             severity: InfoBarSeverity.success,
             isLong: true,
@@ -91,7 +91,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
         context,
         builder: (context, close) {
           return InfoBar(
-            title: Text("Something went wrong!"),
+            title: const Text("Something went wrong!"),
             content: Text("Unable to edit team: ${e.message}"),
             severity: InfoBarSeverity.error,
             isLong: true,
@@ -206,10 +206,10 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
       return Padding(
         padding: EdgeInsets.only(top: d.key == 0 ? Sizes.p8 : Sizes.p24),
         child: Expander(
-          leading: Icon(FluentIcons.health_solid),
+          leading: const Icon(FluentIcons.health_solid),
           header: Text("$roleName (${roleUsers.length})"),
           content: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 100, maxHeight: 250),
+            constraints: const BoxConstraints(minHeight: 100, maxHeight: 250),
             child: ListView.builder(
               itemCount: roleUsers.length,
               itemBuilder: (context, index) {
@@ -310,8 +310,10 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
                             context,
                             builder: (context, close) {
                               return InfoBar(
-                                title: Text("Success"),
-                                content: Text("Team deleted successfully"),
+                                title: const Text("Success"),
+                                content: const Text(
+                                  "Team deleted successfully",
+                                ),
                                 severity: InfoBarSeverity.success,
                                 isLong: true,
                                 onClose: close,
@@ -323,7 +325,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
                             context,
                             builder: (context, close) {
                               return InfoBar(
-                                title: Text("Error"),
+                                title: const Text("Error"),
                                 content: Text("Failed to delete team: $e"),
                                 severity: InfoBarSeverity.error,
                                 isLong: true,
@@ -344,16 +346,19 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
           child: FlyoutTarget(
             controller: teamFlyoutController,
             child: Expander(
-              leading: Icon(FluentIcons.teamwork),
+              leading: const Icon(FluentIcons.teamwork),
               trailing: Button(
-                child: Text('Edit Team'),
+                child: const Text('Edit Team'),
                 onPressed: () {
                   showEditDialog(context, roles, users, team: teamData);
                 },
               ),
               header: Text("$teamName (${teamUsers.length})"),
               content: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: 100, maxHeight: 250),
+                constraints: const BoxConstraints(
+                  minHeight: 100,
+                  maxHeight: 250,
+                ),
                 child: ListView.builder(
                   itemCount: teamUsers.length,
                   itemBuilder: (context, index) {
@@ -390,8 +395,8 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
                                           context,
                                           builder: (context, close) {
                                             return InfoBar(
-                                              title: Text("Success"),
-                                              content: Text(
+                                              title: const Text("Success"),
+                                              content: const Text(
                                                 "Member removed successfully",
                                               ),
                                               severity: InfoBarSeverity.success,
@@ -405,7 +410,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
                                           context,
                                           builder: (context, close) {
                                             return InfoBar(
-                                              title: Text("Error"),
+                                              title: const Text("Error"),
                                               content: Text(
                                                 "Failed to remove member: $e",
                                               ),
@@ -466,11 +471,11 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
         future: fetchData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: ProgressBar());
+            return const LoadingPage();
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text("Something wen't wrong"));
+            return ErrorPage(erorrMessage: snapshot.error.toString());
           }
 
           final roles = snapshot.data?[0];
@@ -487,7 +492,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
                     child: TextBox(
                       placeholder: "Search by Name",
                       controller: controller,
-                      suffix: Padding(
+                      suffix: const Padding(
                         padding: EdgeInsets.only(right: Sizes.p12),
                         child: Icon(FluentIcons.search),
                       ),
@@ -503,7 +508,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
                       FilledButton(
                         child: Row(
                           spacing: Sizes.p12,
-                          children: [
+                          children: const [
                             Icon(FluentIcons.add_friend),
                             Text("Create Team"),
                           ],
@@ -517,7 +522,7 @@ class _RoleAssignmentState extends ConsumerState<RoleAssignment> {
               ),
 
               gap24,
-              Text('Default Roles').titleSmallBold,
+              const Text('Default Roles').titleSmallBold,
               if (roles?.total != 0) ...rolesWidgets(roles!, users!),
 
               if (teams?.total != 0) ...teamsWidgets(teams!, roles!, users!),

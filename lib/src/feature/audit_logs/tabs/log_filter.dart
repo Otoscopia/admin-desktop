@@ -31,7 +31,7 @@ class _LogFilterState extends ConsumerState<LogFilter> {
     return ScaffoldPage.scrollable(
       children: [
         FilterContainer(
-          titles: ['Start Date', 'End Date'],
+          titles: const ['Start Date', 'End Date'],
           widgets: [
             DatePicker(
               selected: startDate,
@@ -51,7 +51,7 @@ class _LogFilterState extends ConsumerState<LogFilter> {
         ),
         gap16,
         FilterContainer(
-          titles: ['User Role', 'User Activity'],
+          titles: const ['User Role', 'User Activity'],
           widgets: [
             ComboBox(
               value: userRole,
@@ -108,7 +108,7 @@ class _LogFilterState extends ConsumerState<LogFilter> {
         SizedBox(
           width: 330,
           child: FilledButton(
-            child: Text('Submit'),
+            child: const Text('Submit'),
             onPressed: () async {
               source = HistoryLogsSource(
                 queries: [
@@ -135,7 +135,7 @@ class _LogFilterState extends ConsumerState<LogFilter> {
             child: AsyncTable(
               source: source,
               minWidth: 2000,
-              columns: [
+              columns: const [
                 DataColumn2(label: Text('User ID'), size: ColumnSize.L),
                 DataColumn2(label: Text('Name'), size: ColumnSize.L),
                 DataColumn2(label: Text('Email'), size: ColumnSize.L),

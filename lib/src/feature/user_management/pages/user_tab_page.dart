@@ -182,7 +182,7 @@ class _UserTabPageState extends ConsumerState<UserTabPage> {
             showCheckboxColumn: false,
             minWidth: 2000,
             source: source,
-            columns: [
+            columns: const [
               DataColumn2(label: Text('Name'), size: ColumnSize.L),
               DataColumn2(label: Text('Role'), size: ColumnSize.S),
               DataColumn2(label: Text('Email')),
@@ -201,7 +201,7 @@ class _UserTabPageState extends ConsumerState<UserTabPage> {
           bottom: 19,
           right: 500,
           child: HyperlinkButton(
-            child: Text('Notify emergency password change'),
+            child: const Text('Notify emergency password change'),
             onPressed: () async {
               await functions.createExecution(
                 functionId: getFunctionId('emergency-password-notification'),

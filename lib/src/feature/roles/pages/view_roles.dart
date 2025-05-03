@@ -18,13 +18,6 @@ class _ViewRolesState extends ConsumerState<ViewRoles> {
   String? selectedItemId;
   List<dynamic> permissions = [];
 
-  final permissionTypes = [
-    {'type': 'read', 'label': 'Read Permission'},
-    {'type': 'create', 'label': 'Write Permission'},
-    {'type': 'update', 'label': 'Update Permission'},
-    {'type': 'delete', 'label': 'Delete Permission'},
-  ];
-
   @override
   Widget build(BuildContext context) {
     final teamsRoles = ref.watch(fetchTeamsRolesProvider);
@@ -42,7 +35,7 @@ class _ViewRolesState extends ConsumerState<ViewRoles> {
               borderRadius: BorderRadius.circular(Sizes.p12),
               child: m3.Material(
                 child: m3.DataTable(
-                  columns: [
+                  columns: const [
                     m3.DataColumn(label: Text("Role/Team")),
                     m3.DataColumn(label: Text("Description")),
                     m3.DataColumn(label: Text("Details")),
@@ -127,7 +120,7 @@ class _ViewRolesState extends ConsumerState<ViewRoles> {
                       header: Text("${permType['label']} (${permList.length})"),
                       content: m3.Material(
                         child: m3.DataTable(
-                          columns: [
+                          columns: const [
                             m3.DataColumn(label: Text("Name")),
                             m3.DataColumn(label: Text("Description")),
                           ],
@@ -151,18 +144,9 @@ class _ViewRolesState extends ConsumerState<ViewRoles> {
         );
       },
       error: (error, stackTrace) {
-        return ScaffoldPage(
-          content: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [Text("Something went wrong: ${error.toString()}")],
-            ),
-          ),
-        );
+        return ErrorPage(erorrMessage: error.toString());
       },
-      loading: () {
-        return ScaffoldPage(content: Center(child: ProgressBar()));
-      },
+      loading: () => const LoadingPage(),
     );
   }
 }

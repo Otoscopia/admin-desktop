@@ -36,11 +36,11 @@ class AuditLogs extends ConsumerWidget {
       future: Future.wait([fetchRoles(), fetchEvents()]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return ProgressBar();
+          return const LoadingPage();
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text(snapshot.error.toString()));
+          return ErrorPage(erorrMessage: snapshot.error.toString());
         }
 
         final roles = snapshot.data?[0];
@@ -49,7 +49,7 @@ class AuditLogs extends ConsumerWidget {
         return TabPages(
           tabTitles: ['Logs Filter', 'Main Logs'],
           icons: [FluentIcons.filter, FluentIcons.bulleted_list],
-          bodies: [LogFilter(events: events, roles: roles), MainLogs()],
+          bodies: [LogFilter(events: events, roles: roles), const MainLogs()],
         );
       },
     );

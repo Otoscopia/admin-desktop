@@ -21,8 +21,8 @@ class _UserTabsState extends ConsumerState<UserTabs> {
     super.initState();
     tabs = [
       Tab(
-        icon: Icon(FluentIcons.group),
-        text: Text('Users'),
+        icon: const Icon(FluentIcons.group),
+        text: const Text('Users'),
         body: UserTabPage(
           onUserTabPressed: ({required String name, required String uid}) {
             generateTab(name: name, uid: uid);
@@ -36,7 +36,7 @@ class _UserTabsState extends ConsumerState<UserTabs> {
     late final Tab tab;
     tab = Tab(
       text: Text(name),
-      icon: Icon(FluentIcons.data_management_settings),
+      icon: const Icon(FluentIcons.data_management_settings),
       body: ManageUserPage(uid),
       onClosed: () {
         tabs.remove(tab);
@@ -52,7 +52,7 @@ class _UserTabsState extends ConsumerState<UserTabs> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
-      padding: EdgeInsets.symmetric(vertical: Sizes.p4),
+      padding: const EdgeInsets.symmetric(vertical: Sizes.p4),
       content: TabView(
         shortcutsEnabled: false,
         currentIndex: currentIndex,

@@ -54,7 +54,7 @@ class DependencyInjector {
     logger.info("Setting up desktop manager...");
     await windowManager.ensureInitialized();
 
-    final windowOptions = WindowOptions(
+    const windowOptions = WindowOptions(
       size: Size(1000, 775),
       minimumSize: Size(1000, 775),
       title: "Otoscopia Admin",

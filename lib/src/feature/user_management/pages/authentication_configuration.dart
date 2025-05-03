@@ -138,8 +138,8 @@ class _AuthenticationConfigurationState
                 mainAxisSize: MainAxisSize.min,
                 spacing: Sizes.p24,
                 children: [
-                  Padding(padding: const EdgeInsets.only(top: Sizes.p24)),
-                  Text("Settings").titleSmallBold,
+                  const Padding(padding: EdgeInsets.only(top: Sizes.p24)),
+                  const Text("Settings").titleSmallBold,
 
                   // Display a loading indicator for individual settings if they're being updated
                   ConfigurationContainer(
@@ -182,7 +182,7 @@ class _AuthenticationConfigurationState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Mandatory Multi-Factor Authentication'),
+                      const Text('Mandatory Multi-Factor Authentication'),
                       ToggleSwitch(
                         checked: mfa,
                         onChanged: (value) async {
@@ -190,7 +190,7 @@ class _AuthenticationConfigurationState
                           await updateDocument('mfa_status', mfa: value);
                         },
                       ),
-                      SizedBox(width: 210),
+                      const SizedBox(width: 210),
                     ],
                   ),
                 ],
@@ -206,14 +206,12 @@ class _AuthenticationConfigurationState
             children: [
               Text("Something went wrong: ${error.toString()}"),
               gap16,
-              FilledButton(child: Text("Retry"), onPressed: () {}),
+              FilledButton(child: const Text("Retry"), onPressed: () {}),
             ],
           ),
         );
       },
-      loading: () {
-        return Center(child: ProgressBar());
-      },
+      loading: () => const LoadingPage(),
     );
   }
 }

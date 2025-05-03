@@ -39,13 +39,13 @@ class _AsyncTableState extends ConsumerState<AsyncTable> {
         showCheckboxColumn: widget.showCheckboxColumn,
         showFirstLastButtons: true,
         autoRowsToHeight: false,
-        loading: Center(child: ProgressBar()),
-        empty: Center(child: Text('No data found')),
+        loading: const Center(child: ProgressBar()),
+        empty: const Center(child: Text('No data found')),
         onSelectAll: (value) {
           logger.info("select all $value");
           setState(() => selectAll = value);
         },
-        availableRowsPerPage: [5, 10, 20, 50],
+        availableRowsPerPage: const [5, 10, 20, 50],
         onRowsPerPageChanged: (value) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             setState(() {
