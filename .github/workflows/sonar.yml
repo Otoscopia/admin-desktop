@@ -34,8 +34,8 @@ jobs:
         run: flutter pub get
         
       # Run build_runner to generate files
-      - name: Generate files with build_runner
-        run: dart run build_runner build --delete-conflicting-outputs
+      # - name: Generate files with build_runner
+      #   run: dart run build_runner build --delete-conflicting-outputs
 
       # Triggering SonarQube analysis as results of it are required by Quality Gate check.
       - name: SonarQube Scan
