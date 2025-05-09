@@ -19,6 +19,7 @@ class HistoryLogsSource extends AsyncDataTableSource {
         ...?queries,
         Query.offset(startIndex),
         Query.limit(count),
+        Query.orderDesc("\$createdAt"),
       ];
 
       final response = await database.listDocuments(

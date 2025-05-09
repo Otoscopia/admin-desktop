@@ -20,7 +20,7 @@ class AuthenticationEntity {
     );
   }
 
-  String logDetails(String event, {String? userId}) {
+  String logDetails(String event, {String? toUser}) {
     late String info;
     if (kIsWeb) {
       final web = (device as WebBrowserInfo);
@@ -34,7 +34,8 @@ class AuthenticationEntity {
     }
 
     return json.encode({
-      'user': userId ?? user?.uid,
+      'user': user?.uid,
+      'to': toUser,
       'role': user?.roleId,
       'location': user?.location,
       'ip': user?.ip,

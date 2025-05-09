@@ -55,7 +55,7 @@ class _UserTabPageState extends ConsumerState<UserTabPage> {
               text: const Text('Send Password Reset Mail'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                await _verifyPhoneNumber(selectedUser!);
+                await _resetPassword(selectedUser!);
               },
             ),
             if (!user['is_email_verified'])
@@ -82,11 +82,36 @@ class _UserTabPageState extends ConsumerState<UserTabPage> {
     );
   }
 
+  Future<void> _resetPassword(Map<String, dynamic> user) async {
+    final auth = ref.read(authenticationProvider);
+
+    final response = await functions.createExecution(
+      functionId: getFunctionId('reset-password'),
+      body: auth.logDetails(geteventId('reset-password'), toUser: user['id']),
+      method: ExecutionMethod.pOST,
+    );
+
+    final data = json.decode(response.responseBody);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      displayInfoBar(
+        context,
+        builder: (context, close) {
+          return InfoBar(
+            title: Text(data['title']),
+            content: Text(data['message']),
+            severity: InfoBarSeverity.success,
+          );
+        },
+      );
+    });
+  }
+
   Future<void> _verifyEmail(Map<String, dynamic> user) async {
     final auth = ref.read(authenticationProvider);
     final response = await functions.createExecution(
       functionId: getFunctionId('verify-email'),
-      body: auth.logDetails(geteventId('verify-email'), userId: user['id']),
+      body: auth.logDetails(geteventId('verify-email'), toUser: user['id']),
       method: ExecutionMethod.pOST,
     );
 
@@ -128,7 +153,7 @@ class _UserTabPageState extends ConsumerState<UserTabPage> {
     final auth = ref.read(authenticationProvider);
     final response = await functions.createExecution(
       functionId: getFunctionId('verify-phone'),
-      body: auth.logDetails(geteventId('verify-phone'), userId: user['id']),
+      body: auth.logDetails(geteventId('verify-phone'), toUser: user['id']),
       method: ExecutionMethod.pOST,
     );
 

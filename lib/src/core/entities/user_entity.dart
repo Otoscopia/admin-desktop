@@ -34,6 +34,7 @@ class UserEntity {
   final String? session;
   final String? location;
   final String? ip;
+  final String? avatar;
 
   UserEntity({
     required this.uid,
@@ -64,6 +65,7 @@ class UserEntity {
     this.ip,
     this.deactivationTime,
     this.passwordExpiration,
+    this.avatar,
   });
 
   UserEntity copyWith({
@@ -94,6 +96,7 @@ class UserEntity {
     String? session,
     String? location,
     String? ip,
+    String? avatar,
   }) {
     return UserEntity(
       uid: uid ?? this.uid,
@@ -123,6 +126,7 @@ class UserEntity {
       session: session ?? this.session,
       location: location ?? this.location,
       ip: ip ?? this.ip,
+      avatar: avatar ?? this.avatar,
     );
   }
 

@@ -139,4 +139,29 @@ class Authentication extends _$Authentication {
     functionIds = functions;
     eventIds = events;
   }
+
+  void updateInformation({
+    String? name,
+    String? phone,
+    String? workAddress,
+  }) async {
+    final response = state.user!.copyWith(
+      readableName: name,
+      contactNumber: phone,
+      workAddress: workAddress,
+    );
+
+    state = state.copyWith(user: response);
+
+    database.updateDocument(
+      databaseId: databaseId,
+      collectionId: getCollectionId('users'),
+      documentId: state.user!.uid,
+      data: {
+        'readable_name': name,
+        'contact_number': phone,
+        'work_address': workAddress,
+      },
+    );
+  }
 }

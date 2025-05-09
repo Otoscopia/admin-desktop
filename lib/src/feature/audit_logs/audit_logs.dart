@@ -1,4 +1,4 @@
-import 'package:appwrite/models.dart';
+import 'package:admin/src/feature/audit_logs/provider/fetch_audit_logs.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,39 +12,14 @@ export 'tabs/main_logs.dart';
 class AuditLogs extends ConsumerWidget {
   const AuditLogs({super.key});
 
-  Future<List<Document>> fetchRoles() async {
-    final response = await database.listDocuments(
-      databaseId: databaseId,
-      collectionId: getCollectionId('roles'),
-    );
-
-    return response.documents;
-  }
-
-  Future<List<Document>> fetchEvents() async {
-    final response = await database.listDocuments(
-      databaseId: databaseId,
-      collectionId: getCollectionId('events'),
-    );
-
-    return response.documents;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder(
-      future: Future.wait([fetchRoles(), fetchEvents()]),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingPage();
-        }
+    final logs = ref.watch(fetchAuditLogsProvider);
 
-        if (snapshot.hasError) {
-          return ErrorPage(erorrMessage: snapshot.error.toString());
-        }
-
-        final roles = snapshot.data?[0];
-        final events = snapshot.data?[1];
+    return logs.when(
+      data: (data) {
+        final roles = data[0];
+        final events = data[1];
 
         return TabPages(
           tabTitles: ['Logs Filter', 'Main Logs'],
@@ -52,6 +27,8 @@ class AuditLogs extends ConsumerWidget {
           bodies: [LogFilter(events: events, roles: roles), const MainLogs()],
         );
       },
+      error: (error, stackTrace) => ErrorPage(erorrMessage: error.toString()),
+      loading: () => LoadingPage(),
     );
   }
 }

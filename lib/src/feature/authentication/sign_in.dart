@@ -83,12 +83,12 @@ class _SignInState extends ConsumerState<SignIn> {
                           CustomTextBox(
                             controller: emailController,
                             label: "Email Address",
-                            placeholder: "admin@otoscopia.md",
+                            placeholder: "Enter your Email Address",
                           ),
                           CustomPasswordBox(
                             controller: passwordController,
                             label: "Password",
-                            placeholder: "otoscopia2023!",
+                            placeholder: "Enter your Password",
                           ),
                           if (auth.isLoading)
                             const ProgressRing()

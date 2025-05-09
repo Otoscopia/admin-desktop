@@ -5,9 +5,11 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -41,3 +43,18 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# build_runner generated files
+# *.g.dart
+
+# Sonar lint
+.scannerwork
+.sonarlint
+
+# Vscode
+.vscode
+
+# environment
+.env
+sentry.properties
+sentry-wizard.exe

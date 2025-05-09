@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,11 +28,7 @@ class _AdminState extends ConsumerState<Admin> {
         pane: NavigationPane(
           selected: index,
           header: const Text("Otoscopia"),
-          onItemPressed: (int i) {
-            setState(() {
-              index = i;
-            });
-          },
+          onItemPressed: (int i) => setState(() => index = i),
           items: [
             PaneItem(
               icon: const Icon(FluentIcons.view_dashboard),
@@ -44,7 +42,7 @@ class _AdminState extends ConsumerState<Admin> {
             ),
             PaneItem(
               icon: const Icon(FluentIcons.cloud_secure),
-              title: const Text("Access Controll"),
+              title: const Text("Access Control List"),
               body: const TabPages(
                 tabTitles: ['Role Assignment', 'Roles'],
                 icons: [FluentIcons.temporary_user, FluentIcons.user_window],
@@ -100,12 +98,17 @@ class _AdminState extends ConsumerState<Admin> {
                 if (context.mounted) {
                   Navigator.of(context).pushAndRemoveUntil(
                     FluentPageRoute(
-                      builder:
-                          (context) => AppContainer(
-                            onLoaded:
-                                (context) =>
-                                    const PageContainer(content: SignIn()),
-                          ),
+                      builder: (context) {
+                        if (!kIsWeb) {
+                          PageContainer(content: SignIn());
+                        }
+
+                        return AppContainer(
+                          onLoaded: (context) {
+                            return const PageContainer(content: SignIn());
+                          },
+                        );
+                      },
                     ),
                     (route) => false,
                   );
