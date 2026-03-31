@@ -54,7 +54,7 @@ dependencies:
   fl_chart: ^0.71.0
 
 dev_dependencies:
-  sentry_dart_plugin: ^2.4.1
+  sentry_dart_plugin: ^3.0.0
   flutter_test:
     sdk: flutter
 
